@@ -4,9 +4,6 @@ FROM nvcr.io/nvidia/pytorch:22.12-py3
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-ENV cwd="/home/"
-WORKDIR $cwd
-
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 ENV TZ=Asia/Singapore
@@ -30,6 +27,9 @@ RUN rm -rf /var/cache/apt/archives/
 ### APT END ###
 
 RUN python3 -m pip install --upgrade pip setuptools
+
+COPY . /yolov7
+RUN python3 -m pip install --no-cache-dir /yolov7
 
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt

@@ -1,9 +1,6 @@
-WORKSPACE=/media/data/yolov7
-DATA=/media/data/datasets
+SAHI=/mnt/c/Users/CJIAHA1/dev/yh-yolov7/yolov7/sahi
 
 docker run -it --rm \
 	--gpus all \
-    -w $WORKSPACE \
-	-v $WORKSPACE:$WORKSPACE \
-	-v $DATA:$DATA \
+	-v $SAHI:/sahi \
 	yolov7

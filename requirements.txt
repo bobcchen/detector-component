@@ -14,3 +14,6 @@ gdown==4.5.1
 # Extras --------------------------------------
 # sutil  # system utilization
 # thop  # FLOPs computation
+
+# Sahi
+sahi==0.10.5
