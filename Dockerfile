@@ -28,8 +28,12 @@ RUN rm -rf /var/cache/apt/archives/
 
 RUN python3 -m pip install --upgrade pip setuptools
 
-COPY . /yolov7
-RUN python3 -m pip install --no-cache-dir /yolov7
+COPY . /app
+WORKDIR /app
+# install yolov7
+RUN python3 -m pip install --no-cache-dir
 
-COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
+
+WORKDIR /app/component
+CMD ["python3", "base_component.py"]
