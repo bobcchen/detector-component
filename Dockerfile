@@ -1,4 +1,4 @@
-# docker build -t yolov7 .
+# docker build -t detector-component:v1 .
 
 FROM nvcr.io/nvidia/pytorch:22.12-py3
 
