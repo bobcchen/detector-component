@@ -7,6 +7,8 @@ import logging
 import time
 import signal
 
+from component import Component
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -87,7 +89,6 @@ class BaseComponent(ABC):
             self.d_bufs[uuid][field][0][:] = array
 
     def run(self):
-        # 32 uuid characters, followed by metadata
         uuid = self.queue.get()
         logging.info(f'Processing frame from {uuid}...')
 
@@ -128,7 +129,7 @@ if __name__ == '__main__':
     parser.add_argument('--pipeline_id', default=0, type=str)
     args = parser.parse_args()
 
-    server = BaseComponent(args)
+    server = Component(args)
 
     run = True
 
