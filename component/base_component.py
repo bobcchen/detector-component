@@ -50,14 +50,14 @@ class BaseComponent(ABC):
 
         event_dtype_list = []
         # parse data dict config
-        for field, config in data_dict.items():
-            dtype = np.dtype(f'{config["shape"]}{config["dtype"]}')
-            if 'length' in config:
+        for field, d_config in data_dict.items():
+            dtype = np.dtype(f'{d_config["shape"]}{d_config["dtype"]}')
+            if 'length' in d_config:
                 # add len field
                 len_field = f'_{field}_len'
                 event_dtype_list.append((len_field, np.dtype('u4')))  # len has fixed dtype of uint32
 
-                event_dtype_list.append((field, dtype, config['length']))
+                event_dtype_list.append((field, dtype, d_config['length']))
             else:
                 event_dtype_list.append((field, dtype))
         event_dtype = np.dtype(event_dtype_list)
