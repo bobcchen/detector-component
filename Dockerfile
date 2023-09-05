@@ -31,9 +31,9 @@ RUN python3 -m pip install --upgrade pip setuptools
 COPY . /app
 WORKDIR /app
 # install yolov7
-RUN python3 -m pip install --no-cache-dir
+RUN python3 -m pip install --no-cache-dir .
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 WORKDIR /app/component
-CMD ["python3", "base_component.py"]
+CMD ["python3", "server.py"]
