@@ -1,6 +1,7 @@
 from component import Component
 
 import argparse
+import signal
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
