@@ -99,8 +99,8 @@ class BaseComponent(ABC):
 
         # Write to shm
         output_names = ['frame']  # TODO: from config
-        for i, output in enumerate(output_names):
-            self.shm_write(uuid, output_names[i], output)
+        for i, output_name in enumerate(output_names):
+            self.shm_write(uuid, output_name, outputs[i])
 
         if self.next_queue:
             self.next_queue.put(uuid)
