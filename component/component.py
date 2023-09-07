@@ -44,8 +44,7 @@ class Component(BaseComponent):
         dur = perf_counter() - tic
 
         logging.info(f'Time taken: {(dur*1000):0.2f}ms')
-
-        draw_frame = np.copy(image)
+        logging.info(f'Obtained detections: {detections}')
 
         for det in detections[0]:
             l = det['l']
@@ -53,7 +52,8 @@ class Component(BaseComponent):
             r = det['r']
             b = det['b']
             classname = det['label']
-            cv2.rectangle(draw_frame, (l, t), (r, b), (255, 255, 0), 1)
-            cv2.putText(draw_frame, classname, (l, t-8), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0))
+            # draw bounding boxes on the original image; note that image is passed by reference so the underlying image shm is already modified after the following 2 lines
+            cv2.rectangle(image, (l, t), (r, b), (255, 255, 0), 1)
+            cv2.putText(image, classname, (l, t-8), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0))
 
-        return draw_frame
+        return image
