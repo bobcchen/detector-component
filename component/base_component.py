@@ -78,13 +78,14 @@ class BaseComponent(ABC):
             return self.d_bufs[uuid][field][0]
 
     def shm_write(self, uuid, field, array):
-        if 'length' in data_dict[field]:
-            length = array.shape[0]
+        if array.any():
+            if 'length' in data_dict[field]:
+                length = array.shape[0]
 
-            self.d_bufs[uuid][f'_{field}_len'][:] = np.uint32(length)
-            self.d_bufs[uuid][field][0][:length] = array
-        else:
-            self.d_bufs[uuid][field][0][:] = array
+                self.d_bufs[uuid][f'_{field}_len'][:] = np.uint32(length)
+                self.d_bufs[uuid][field][0][:length] = array
+            else:
+                self.d_bufs[uuid][field][0][:] = array
 
     def run(self):
         uuid = self.queue.get()
