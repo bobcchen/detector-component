@@ -46,6 +46,7 @@ class Component(BaseComponent):
         logging.info(f'Time taken: {(dur*1000):0.2f}ms')
         logging.info(f'Obtained detections: {detections}')
 
+        dets = []
         for det in detections[0]:
             l = det['l']
             t = det['t']
@@ -56,4 +57,9 @@ class Component(BaseComponent):
             cv2.rectangle(image, (l, t), (r, b), (255, 255, 0), 1)
             cv2.putText(image, classname, (l, t-8), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0))
 
-        return image
+            # List of detections, each in tuples of ( [left,top,w,h] , confidence, detection_class) required for DSR
+            dets.append([det['l'], det['t'], det['w'], det['h'], det['confidence'], 0])  # treat 'person' as 0
+
+        dets = np.array(dets, dtype='f4')
+        logging.info(f'Returning detections in the following format: {dets}')
+        return dets
