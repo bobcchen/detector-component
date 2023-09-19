@@ -32,7 +32,31 @@ data_dict = {
         'dtype': 'U32',
         'shape': '(2,)',
         'length': 10000
-    }
+    },
+    'detector_tic': {
+        'dtype': 'u4',
+        'shape': '',
+    },
+    'detector_toc': {
+        'dtype': 'u4',
+        'shape': '',
+    },
+    'tracker_tic': {
+        'dtype': 'u4',
+        'shape': '',
+    },
+    'tracker_toc': {
+        'dtype': 'u4',
+        'shape': '',
+    },
+    'classifier_tic': {
+        'dtype': 'u4',
+        'shape': '',
+    },
+    'classifier_toc': {
+        'dtype': 'u4',
+        'shape': '',
+    },
 }
 
 class BaseComponent(ABC):
@@ -53,6 +77,7 @@ class BaseComponent(ABC):
         service_queue = f'{config.service}_queue'
         next_service_queue = f'{config.next_service}_queue' if config.next_service else None
 
+        self.service = config.service
         self.queue = self.manager.get_queue(service_queue)
         self.next_queue = None
         if next_service_queue:
@@ -103,6 +128,8 @@ class BaseComponent(ABC):
         uuid = self.queue.get()
         logging.info(f'Processing frame from {uuid}...')
 
+        self.d_bufs[uuid][f'{self.service}_tic'][:] = np.uint32(time.perf_counter_ns())
+
         # Read from shm
         input_names = ['frame']  # TODO: from config
         inputs = [self.shm_read(uuid, input_name) for input_name in input_names]
@@ -117,6 +144,8 @@ class BaseComponent(ABC):
                 outputs = tuple((outputs, ))
             for i, output_name in enumerate(output_names):
                 self.shm_write(uuid, output_name, outputs[i])
+
+        self.d_bufs[uuid][f'{self.service}_toc'][:] = np.uint32(time.perf_counter_ns())
 
         if self.next_queue:
             self.next_queue.put(uuid)
