@@ -23,6 +23,16 @@ data_dict = {
         'shape': '(6,)',
         'length': 10000
     },
+    'tracks': {
+        'dtype': 'i4',
+        'shape': '(5,)',
+        'length': 10000
+    },
+    'labels': {
+        'dtype': 'U32',
+        'shape': '(2,)',
+        'length': 10000
+    }
 }
 
 class BaseComponent(ABC):
@@ -86,6 +96,8 @@ class BaseComponent(ABC):
                 self.d_bufs[uuid][field][0][:length] = array
             else:
                 self.d_bufs[uuid][field][0][:] = array
+        elif 'length' in data_dict[field]:
+            self.d_bufs[uuid][f'_{field}_len'][:] = np.uint32(0)
 
     def run(self):
         uuid = self.queue.get()
