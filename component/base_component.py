@@ -34,27 +34,27 @@ data_dict = {
         'length': 10000
     },
     'detector_tic': {
-        'dtype': 'u4',
+        'dtype': 'u8',
         'shape': '',
     },
     'detector_toc': {
-        'dtype': 'u4',
+        'dtype': 'u8',
         'shape': '',
     },
     'tracker_tic': {
-        'dtype': 'u4',
+        'dtype': 'u8',
         'shape': '',
     },
     'tracker_toc': {
-        'dtype': 'u4',
+        'dtype': 'u8',
         'shape': '',
     },
     'classifier_tic': {
-        'dtype': 'u4',
+        'dtype': 'u8',
         'shape': '',
     },
     'classifier_toc': {
-        'dtype': 'u4',
+        'dtype': 'u8',
         'shape': '',
     },
 }
@@ -128,7 +128,7 @@ class BaseComponent(ABC):
         uuid = self.queue.get()
         logging.info(f'Processing frame from {uuid}...')
 
-        self.d_bufs[uuid][f'{self.service}_tic'][:] = np.uint32(time.perf_counter_ns())
+        self.d_bufs[uuid][f'{self.service}_tic'][:] = np.uint64(time.perf_counter_ns())
 
         # Read from shm
         input_names = ['frame']  # TODO: from config
@@ -145,7 +145,7 @@ class BaseComponent(ABC):
             for i, output_name in enumerate(output_names):
                 self.shm_write(uuid, output_name, outputs[i])
 
-        self.d_bufs[uuid][f'{self.service}_toc'][:] = np.uint32(time.perf_counter_ns())
+        self.d_bufs[uuid][f'{self.service}_toc'][:] = np.uint64(time.perf_counter_ns())
 
         if self.next_queue:
             self.next_queue.put(uuid)
