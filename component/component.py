@@ -34,7 +34,7 @@ class Component(BaseComponent):
             cudnn_benchmark=False,
         )
         self.sahi_general = SahiGeneral(model=self.yolov7)
-        self.classes = ['person', 'car']
+        self.classes = ['person', 'boat', 'traffic light', 'surfboard']
 
     def process(self, image):
         torch.cuda.synchronize()
@@ -46,7 +46,7 @@ class Component(BaseComponent):
         logging.info(f'Time taken: {(dur*1000):0.2f}ms')
         logging.info(f'Obtained detections: {detections}')
 
-        dets = [[det['l'], det['t'], det['w'], det['h'], det['confidence'], 0] for det in detections[0]]
+        dets = [[det['l'], det['t'], det['w'], det['h'], det['confidence'], self.classes.index(det['label'])] for det in detections[0]]
         dets = np.array(dets, dtype='f4')
         logging.info(f'Returning detections in the following format: {dets}')
         return dets
