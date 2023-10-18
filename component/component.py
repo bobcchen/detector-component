@@ -43,10 +43,11 @@ class Component(BaseComponent):
         torch.cuda.synchronize()
         dur = perf_counter() - tic
 
-        logging.info(f'Time taken: {(dur*1000):0.2f}ms')
-        logging.info(f'Obtained detections: {detections}')
+        # logging.info(f'Time taken: {(dur*1000):0.2f}ms')
+        # logging.info(f'Obtained detections: {detections}')
 
         dets = [[det['l'], det['t'], det['w'], det['h'], det['confidence'], self.classes.index(det['label'])] for det in detections[0]]
         dets = np.array(dets, dtype='f4')
-        logging.info(f'Returning detections in the following format: {dets}')
+        logging.info(dets.shape[0])
+        # logging.info(f'Returning detections in the following format: {dets}')
         return dets

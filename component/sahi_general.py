@@ -69,8 +69,8 @@ class SahiGeneral(DetectionModel):
             Defaulted to True
     """
     model: object = None
-    sahi_image_height_threshold: int = 900
-    sahi_image_width_threshold: int = 900
+    sahi_image_height_threshold: int = 10000  # off sahi
+    sahi_image_width_threshold: int = 10000  # off sahi
     sahi_slice_height: int = 512
     sahi_slice_width: int = 512
     sahi_overlap_height_ratio: float = 0.2
