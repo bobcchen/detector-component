@@ -131,40 +131,40 @@ class SahiGeneral(DetectionModel):
         if all_detections is None:
             all_detections = [[]] * len(images_to_detect)
 
-        # batch up SAHI detection
-        sahi_predictions, all_shift_amount, all_full_shape = self._sahi_detection_batch(list_of_sahi_imgs, classes)
-
-        # combine SAHI detections with full image detection
-        all_sahi_results = []
-        for i, idx in enumerate(list_of_sahi_idx):
-            if self.full_frame_detection:
-                full_frame_predictions = all_detections[idx]
-            else:
-                full_frame_predictions = []
-            sahi_detection_results = self._detect_sahi(full_frame_predictions, sahi_predictions[i], all_shift_amount[i], all_full_shape[i])
-            all_sahi_results.append(sahi_detection_results)
-
-        # convert detections from SAHI format to dictionary format
-        for i, idx in enumerate(list_of_sahi_idx):
-            img_result = []
-            for sahi_result in all_sahi_results[i]:
-                for obj_det in sahi_result:
-                    l = int(obj_det.bbox.minx)
-                    t = int(obj_det.bbox.miny)
-                    r = int(obj_det.bbox.maxx)
-                    b = int(obj_det.bbox.maxy)
-                    w = r - l
-                    h = b - t
-                    score = obj_det.score.value
-                    class_name = obj_det.category.name
-                    result = {'label': class_name, 'confidence': score, 't': t, 'l': l, 'b': b, 'r': r, 'w': w, 'h': h}
-                    img_result.append(result)
-            if self.full_frame_detection:
-                # replace result with the combination of both SAHI and non-SAHI detections
-                all_detections[idx] = img_result
-            else:
-                # insert SAHI detections into the correct idx
-                all_detections.insert(idx, img_result)
+        # # batch up SAHI detection
+        # sahi_predictions, all_shift_amount, all_full_shape = self._sahi_detection_batch(list_of_sahi_imgs, classes)
+        #
+        # # combine SAHI detections with full image detection
+        # all_sahi_results = []
+        # for i, idx in enumerate(list_of_sahi_idx):
+        #     if self.full_frame_detection:
+        #         full_frame_predictions = all_detections[idx]
+        #     else:
+        #         full_frame_predictions = []
+        #     sahi_detection_results = self._detect_sahi(full_frame_predictions, sahi_predictions[i], all_shift_amount[i], all_full_shape[i])
+        #     all_sahi_results.append(sahi_detection_results)
+        #
+        # # convert detections from SAHI format to dictionary format
+        # for i, idx in enumerate(list_of_sahi_idx):
+        #     img_result = []
+        #     for sahi_result in all_sahi_results[i]:
+        #         for obj_det in sahi_result:
+        #             l = int(obj_det.bbox.minx)
+        #             t = int(obj_det.bbox.miny)
+        #             r = int(obj_det.bbox.maxx)
+        #             b = int(obj_det.bbox.maxy)
+        #             w = r - l
+        #             h = b - t
+        #             score = obj_det.score.value
+        #             class_name = obj_det.category.name
+        #             result = {'label': class_name, 'confidence': score, 't': t, 'l': l, 'b': b, 'r': r, 'w': w, 'h': h}
+        #             img_result.append(result)
+        #     if self.full_frame_detection:
+        #         # replace result with the combination of both SAHI and non-SAHI detections
+        #         all_detections[idx] = img_result
+        #     else:
+        #         # insert SAHI detections into the correct idx
+        #         all_detections.insert(idx, img_result)
         return all_detections
 
     @torch.no_grad()
